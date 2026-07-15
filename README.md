@@ -1,92 +1,85 @@
-# IntelliCite
+# IntelliCite API
 
-## نبذة عن المشروع
+Backend for **IntelliCite**, an AI-assisted research companion that helps students and researchers search academic literature, judge which papers are actually worth reading, and generate citations — without manually screening dozens of results.
 
-IntelliCite هو أداة مساعدة للبحث الأكاديمي تساعد الطلاب والباحثين على اكتشاف وتقييم وإدارة الأوراق الأكاديمية من خلال سير عمل مبسط. يقوم المستخدمون بالبحث حسب الموضوع ويحصلون على تقارير مدعومة بالذكاء الاصطناعي تشرح مدى صلة كل ورقة بحثية باستفسارهم، بالإضافة إلى شارات تقييم تلقائية مثل "عالي الاستشهاد" أو "قديم" بناءً على مقاييس الاستشهاد. يتضمن النظام ميزات عملية لحفظ الأوراق وتوليد الاستشهادات بتنسيقات متعددة وتتبع تاريخ البحث والوصول إلى ملفات PDF الكاملة، بالإضافة إلى أداة "Cite Check" التي تقيم جودة الأوراق وتقترح بدائل أفضل للمصادر الضعيفة. تتضمن الميزات المستقبلية المخططة إمكانية إنشاء ملصقات أكاديمية، مما يجعل هذا حلاً شاملاً لسير العمل البحثي يتجاوز مجرد اكتشاف الأوراق ليوفر تحليلاً ذكياً وتقييماً للجودة.
+The frontend lives in a companion repo: [intellicite-ui](https://github.com/EntisarOsiami/intellicite-ui).
 
-## الفئة المستهدفة
+## The problem
 
-- الباحثون الأكاديميون
-- طلاب الجامعات
-- الطلاب في الدراسات العليا
+Academic search engines return a pile of papers with no easy way to judge relevance, credibility, or citation quality without reading each one. IntelliCite lets a user search by topic and get back an AI-generated report explaining *why* each paper matches their query, plus automatic quality badges ("highly cited", "recent", "outdated"). A separate "Cite Check" tool takes a paper's DOI and a research question and tells the user whether that source is actually a good fit — or suggests it isn't.
 
+## Features
 
-## الميزات الرئيسية
+- Search academic papers by topic (Semantic Scholar + Unpaywall integration)
+- AI-generated relevance reports per paper via an OpenAI Assistant
+- Automatic quality badges based on citation metrics (citation count, publication age)
+- **Cite Check** — given a DOI and a research question, evaluates whether that source fits and suggests better alternatives if it doesn't
+- Save papers, generate citations in multiple formats (APA, MLA, etc.), and track search history
+- JWT-based authentication, with a separate admin surface for managing users/content
 
-### البحث والاكتشاف
-- البحث عن الأوراق الأكاديمية حسب الموضوع
-- تكامل مع APIs مثل Semantic Scholar
-- تقارير مدعومة بالذكاء الاصطناعي
+## Tech stack
 
-### التقييم والتحليل
-- شارات تقييم تلقائية ("عالي الاستشهاد"، "حديث"، "قديم")
-- أداة "Cite Check" للتحقق من جودة الأوراق
-- اقتراح بدائل أفضل للمصادر الضعيفة
+| | |
+|---|---|
+| Runtime | Node.js, TypeScript |
+| Framework | Express 5 |
+| Database | MongoDB + Mongoose |
+| Auth | JWT (`jsonwebtoken`), `bcryptjs` |
+| AI | OpenAI (Assistants API) |
+| External data | Semantic Scholar API, Unpaywall API |
+| Hardening | Helmet, CORS |
 
-### الإدارة والتنظيم
-- حفظ الأوراق للرجوع إليها لاحقاً
-- تتبع تاريخ البحث
-- الوصول إلى ملفات PDF الكاملة
+## API reference
 
-### الاستشهاد والتوثيق
-- توليد الاستشهادات بتنسيقات متعددة (APA، MLA، إلخ)
-- تصدير الاستشهادات
+| Route | Method | Description |
+|---|---|---|
+| `/api/users` | various | Registration, login, user management |
+| `/api/papers/search` | GET | Search academic papers by topic (auth required) |
+| `/api/papers/citeCheck` | POST | Evaluate a paper's fit for a research question by DOI (auth required) |
+| `/api/bookmarks` | various | Save and manage bookmarked papers |
+| `/api/user-history` | various | Track a user's search history |
+| `/api/admin` | various | Admin-only user/content management |
 
+## Getting started
 
+```bash
+git clone https://github.com/EntisarOsiami/intellicite-api.git
+cd intellicite-api
+npm install
+cp .env.example .env   # then fill in real values, see below
+npm run dev
+```
 
+## Environment variables
 
+| Variable | Purpose |
+|---|---|
+| `PORT` | Port the server listens on |
+| `MONGODB_URI` | MongoDB Atlas connection string |
+| `DB_NAME` | Database name |
+| `JWT_SECRET` | Secret used to sign auth tokens |
+| `OPENAI_API_KEY` | OpenAI API key |
+| `RESEARCH_ASSISTANT_ID` | ID of an OpenAI Assistant configured for this project (create one in the OpenAI dashboard) |
+| `USER_EMAIL` | Contact email sent with Unpaywall API requests (Unpaywall requires this for identification, no account needed) |
 
-## نقاط النهاية للAPI
+## What I'd improve
 
-| المسار | الوصف |
-|--------|--------|
-| `/api/users` | إدارة المستخدمين والمصادقة |
-| `/api/papers` | البحث واسترجاع الأوراق الأكاديمية |
-| `/api/bookmarks` | حفظ وإدارة الأوراق المحفوظة |
-| `/api/user-history` | تتبع تاريخ البحث للمستخدم |
-| `/api/cite-check` | التحقق من جودة الاستشهادات المحددة |
+- Add a test suite — there currently isn't one
+- Add input validation (e.g. `zod`) on request bodies instead of trusting client input
+- Add rate limiting on public-facing search/cite-check endpoints
+- Generate real API docs (Swagger/OpenAPI) instead of a hand-maintained table
+- Containerize with Docker so redeploys aren't tied to remembering manual setup steps
+- Keep this endpoint table in sync with `app.ts` going forward (e.g. cite-check is nested under `/api/papers`, and the `/api/admin` surface needs documenting too)
 
-## تصميم المشروع
+## Design
 
-يمكن الاطلاع على التصميم الخاص بالمشروع عبر الرابط التالي:
+Figma: [Final Tuwaiq Project](https://www.figma.com/design/AOBplsedeefft6SPW3KOt5/Final-Tuwaiq-Project)
 
-**Figma:** [https://www.figma.com/design/AOBplsedeefft6SPW3KOt5/Final-Tuwaiq-Project?t=MxYOGKv0Wr0tDNN5-1](https://www.figma.com/design/AOBplsedeefft6SPW3KOt5/Final-Tuwaiq-Project?t=MxYOGKv0Wr0tDNN5-1)
+## Team
 
-## رابط النشر
-Frontend: https://intellicite-ui.onrender.com
-Backend API: https://intellicite-api.onrender.com
-
-## التقنيات المستخدمة
-
-| التقنية | الوصف |
-|---------|--------|
-| **React.js/Vite** | إطار عمل JavaScript للواجهة الأمامية |
-| **Tailwind CSS** | إطار عمل CSS للتصميم |
-| **shadcn** | مكتبة مكونات UI |
-| **Axios** | مكتبة لطلبات HTTP |
-| **React Icons** | مكتبة الأيقونات |
-| **Lucide React** | مكتبة أيقونات إضافية |
-| **JWT** | نظام المصادقة والأمان |
-
-## فريق العمل
+Originally built by:
 
 - **[عبدالرحمن الطامي](https://github.com/Iimvalue)**
 - **[عائشة عبدالله](https://github.com/ENG-Aisha-Abdullah)**
 - **[انتصار العتيبي](https://github.com/EntisarOsiami)**
 - **[طلال المطيري](https://github.com/TalalAlrashedi)**
-
-## التثبيت والتشغيل
-
-```bash
-# استنساخ المشروع
-git clone https://github.com/Iimvalue/intellicite-api.git
-
-# الانتقال إلى مجلد المشروع
-cd intellicite
-
-# تثبيت التبعيات
-npm install
-
-# تشغيل المشروع
-npm run dev
-```
