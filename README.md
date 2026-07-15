@@ -70,10 +70,10 @@ Backend API: https://intellicite-api.onrender.com
 
 ## فريق العمل
 
-- **عبدالرحمن الطامي**
-- **عائشة عبدالله**
-- **انتصار العتيبي**
-- **طلال المطيري**
+- **[عبدالرحمن الطامي](https://github.com/Iimvalue)**
+- **[عائشة عبدالله](https://github.com/ENG-Aisha-Abdullah)**
+- **[انتصار العتيبي](https://github.com/EntisarOsiami)**
+- **[طلال المطيري](https://github.com/TalalAlrashedi)**
 
 ## التثبيت والتشغيل
 
