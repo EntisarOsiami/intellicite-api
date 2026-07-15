@@ -2,7 +2,7 @@
 
 Backend for **IntelliCite**, an AI-assisted research companion that helps students and researchers search academic literature, judge which papers are actually worth reading, and generate citations — without manually screening dozens of results.
 
-The frontend lives in a companion repo: [intellicite-ui](https://github.com/EntisarOsiami/intellicite-ui).
+The frontend lives in a companion repo: [intellicite-ui](https://github.com/intisar-alosaimi/intellicite-ui).
 
 ## The problem
 
@@ -43,7 +43,7 @@ Academic search engines return a pile of papers with no easy way to judge releva
 ## Getting started
 
 ```bash
-git clone https://github.com/EntisarOsiami/intellicite-api.git
+git clone https://github.com/intisar-alosaimi/intellicite-api.git
 cd intellicite-api
 npm install
 cp .env.example .env   # then fill in real values, see below
@@ -81,5 +81,5 @@ Originally built by:
 
 - **[عبدالرحمن الطامي](https://github.com/Iimvalue)**
 - **[عائشة عبدالله](https://github.com/ENG-Aisha-Abdullah)**
-- **[انتصار العصيمي](https://github.com/EntisarOsiami)**
+- **[انتصار العصيمي](https://github.com/intisar-alosaimi)**
 - **[طلال المطيري](https://github.com/TalalAlrashedi)**
